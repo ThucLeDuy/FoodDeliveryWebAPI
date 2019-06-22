@@ -1,0 +1,96 @@
+﻿
+
+
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Login page</title>
+    @model Web_API_Services_1.Store_User
+    @{
+        ViewBag.Title = "Login";
+    }
+    <!-- bootstrap library (minified css) -->
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+    <!-- bootstrap library (jquery library) -->
+    <script src="jquery/jquery-3.3.1.min.js"></script>
+    <!-- JavaScript -->
+    <script src="bootstrap/js/bootstrap.min.js"></script>
+    <!-- style css -->
+    <style>
+        body {
+            /*using image for body tag*/
+            background-image: url("image/wallpapers.jpg");
+        }
+
+        .main-div {
+            background-color: #fff; /*color white for background*/
+            border-radius: 4px;
+            padding: 50px 60px 70px 60px;
+            max-width: 400px;
+            margin: 10% auto 15% auto; /*it will centered screen*/
+        }
+
+        .forgot {
+            text-decoration: underline;
+            margin-bottom: 25px;
+        }
+    </style>
+
+    <!-- jquery for input -->
+    <script>
+
+
+        //the page has loaded
+        $(document).ready(function () {
+            // input email and password has focusing, then hide request paragraph
+            $("#email, #password").focus(function () {
+                $("#request-input").fadeOut("fast");
+            });
+
+            //event button login click
+            $(".btn-primary").click(function () {
+
+
+
+                @*$.ajax({
+			        url: '@Url.Action("UserLoginNotModel", "Store_User")',
+			        data: { email: 'sample@google', pwd: '456' }
+			    }).done(function () {
+			        alert('Added');
+			    });*@
+
+            });
+        });
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="main-div">
+                <div class="panel text-center">
+                    <h2>Admin Login</h2>
+                    <p id="request-input">Please enter your email and password</p>
+                </div>
+                <div>
+                    <form action="#">
+                        <div class="form-group">
+                            <input type="email" class="form-control" id="email" placeholder="Email Address" required>
+                            
+                        </div>
+                        <div class="form-group">
+                            <input type="password" class="form-control" id="password" placeholder="Password" required>
+                        </div>
+                        <div class="forgot">
+                            <a href="www.google.com">Forgot Password?</a>
+                        </div>
+                        <button id="btnLogin" class="btn btn-primary" type="submit">Login</button>
+                        <button id="btnLog2" onclick="doST();" class="btn">Login2</button>
+                    </form>
+                </div>
+                
+
+            </div>
+        </div>
+    </div>
+</body>
+</html>

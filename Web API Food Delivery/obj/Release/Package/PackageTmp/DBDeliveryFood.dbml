@@ -1,0 +1,72 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="dbDeliveryFood" Class="DBFoodDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="WebSettings" ConnectionString="Data Source=TOMATO\SQLEXPRESS;Initial Catalog=dbDeliveryFood;Integrated Security=True" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="dbDeliveryFoodConnectionString" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.Employee" Member="Employees">
+    <Type Name="Employee">
+      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="hire_date" Type="System.DateTime" DbType="Date NOT NULL" CanBeNull="false" />
+      <Column Name="base_salary" Type="System.Decimal" DbType="Money" CanBeNull="true" />
+      <Column Name="role" Type="System.String" DbType="VarChar(55)" CanBeNull="true" />
+      <Association Name="Employee_Invoice" Member="Invoices" ThisKey="id" OtherKey="id_employee" Type="Invoice" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Store_Users" Member="Store_Users">
+    <Type Name="Store_User">
+      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="email" Type="System.String" DbType="VarChar(40)" CanBeNull="true" />
+      <Column Name="password" Type="System.String" DbType="VarChar(255)" CanBeNull="true" />
+      <Column Name="name" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="gender" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="dob" Type="System.DateTime" DbType="Date" CanBeNull="true" />
+      <Column Name="phonenumber" Type="System.String" DbType="Char(12)" CanBeNull="true" />
+      <Column Name="address" Type="System.String" DbType="VarChar(255)" CanBeNull="true" />
+      <Column Name="image" Type="System.String" DbType="VarChar(255)" CanBeNull="true" />
+      <Column Name="created_at" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="updated_at" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Association Name="Store_User_Invoice" Member="Invoices" ThisKey="id" OtherKey="id_user" Type="Invoice" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Invoice_Detail" Member="Invoice_Details">
+    <Type Name="Invoice_Detail">
+      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="id_product" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="quantity" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="Product_Invoice_Detail" Member="Product" ThisKey="id_product" OtherKey="id" Type="Product" IsForeignKey="true" />
+      <Association Name="Invoice_Invoice_Detail" Member="Invoice" ThisKey="id" OtherKey="id" Type="Invoice" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Product" Member="Products">
+    <Type Name="Product">
+      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="categoryId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="name" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="image" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="description" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="salePrice" Type="System.Decimal" DbType="Money" CanBeNull="true" />
+      <Column Name="timesBooked" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="Product_Invoice_Detail" Member="Invoice_Details" ThisKey="id" OtherKey="id_product" Type="Invoice_Detail" />
+      <Association Name="Product_Category_Product" Member="Product_Category" ThisKey="categoryId" OtherKey="id" Type="Product_Category" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Product_Category" Member="Product_Categories">
+    <Type Name="Product_Category">
+      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="name" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="description" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Association Name="Product_Category_Product" Member="Products" ThisKey="id" OtherKey="categoryId" Type="Product" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Invoice" Member="Invoices">
+    <Type Name="Invoice">
+      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="invoice_date" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="Adress" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="id_employee" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="id_user" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="total" Type="System.Decimal" DbType="Money" CanBeNull="true" />
+      <Column Name="status" Type="System.String" DbType="VarChar(25)" CanBeNull="true" />
+      <Association Name="Invoice_Invoice_Detail" Member="Invoice_Details" ThisKey="id" OtherKey="id" Type="Invoice_Detail" />
+      <Association Name="Employee_Invoice" Member="Employee" ThisKey="id_employee" OtherKey="id" Type="Employee" IsForeignKey="true" />
+      <Association Name="Store_User_Invoice" Member="Store_User" ThisKey="id_user" OtherKey="id" Type="Store_User" IsForeignKey="true" />
+    </Type>
+  </Table>
+</Database>

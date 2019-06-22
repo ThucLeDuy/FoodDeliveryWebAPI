@@ -1,0 +1,257 @@
+﻿
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Product</title>
+    @{
+        ViewBag.Title = "Product";
+    }
+    @model Web_API_Services_1.Models.Product
+    <!-- bootstrap library (minified css) -->
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+    <!-- bootstrap library (jquery library) -->
+    <script src="jquery/jquery-3.3.1.min.js"></script>
+    <!-- JavaScript -->
+    <script src="bootstrap/js/bootstrap.min.js"></script>
+    <!-- cdn font awesome for icon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!-- style css -->
+    <style>
+        .sidenav {
+            background-color: #f1f1f1;
+            height: 900px;
+        }
+
+        #addProduct {
+            margin: 0 0 15px 0;
+        }
+    </style>
+    <script>
+		$(document).ready(function(){
+			// <!-- jquery for search on table -->
+		    $("#search").on("keyup", function() {
+			    var value = $(this).val().toLowerCase();
+			    $("#tableProduct tr").filter(function() {
+			      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+			    });
+            });
+		});
+    </script>
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+    <script>
+        
+        function DeleteProduct(id_product) {
+
+            const Http = new XMLHttpRequest();
+            const url='http://'+window.location.host+'/Product/DeleteProduct/'+id_product;
+            Http.open("DELETE", url);
+            Http.send();
+            Http.onreadystatechange=(e)=>{
+                //if(Http.responseText.valueOf == true)
+            }
+            alert("Xóa món thành công");
+        }
+    //submit data with jQuery AJAX
+        function AddProduct() {
+            
+            var e = document.getElementById("selectCategory");
+
+            $.post("/Product/InsertNewProduct", {
+                categoryId: e.options[e.selectedIndex].value,
+                name: $('#nameProduct').val(),
+                image: "",
+                description: $('#description').val(),
+                salePrice: $('#price').val(),
+                timesBooked: $('#timeBooked').val()
+            },
+		   function () { alert("Thêm món mới thành công") });
+        }
+        //function onSuccess() { alert("Successfully posted to server!"); }
+
+    </script>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row content">
+            <!-- column left -->
+            <div class="col-sm-3 sidenav">
+                <h4>Delivery food</h4>
+                <ul class="nav nav-pills nav-stacked">
+                    <li><a href="@Url.Action("Index", "Home")"><span class="glyphicon glyphicon-dashboard"></span> Dashboard</a></li>
+                    <li><a href="@Url.Action("Product", "Home")"><span class="glyphicon glyphicon-tags"> </span>  Products</a></li>
+                    <li><a href="@Url.Action("Employee", "Home")"><span class="glyphicon glyphicon-user"> </span> Employee</a></li>
+                    <li><a href="@Url.Action("Users", "Home")"><span class="glyphicon glyphicon-pencil"> </span> Users</a></li>
+                    <li><a href="@Url.Action("Invoices", "Home")"><span class="glyphicon glyphicon-piggy-bank"> </span> Invoice</a></li>
+                    <li><a href="#"><i class="fa fa-bar-chart"></i></span> Reports</a></li>
+                    <li><a href="#"><span class="glyphicon glyphicon-cog"></span> System</a></li>
+                </ul>
+            </div>
+            <!-- column right -->
+            <div class="col-sm-9 column-right">
+                <!-- breadcrumb -->
+                <div class="row">
+                    <ul class="breadcrumb">
+                        <li><a href="">Dashboard</a></li>
+                        <li class="active"><a href="#">Product</a></li>
+                    </ul><hr>
+                </div>
+                <!-- button add product, open modal for add product. it hide default -->
+                <button class="btn btn-success" id="addProduct" data-toggle="modal" data-target="#myModal">Add Product</button>
+                <div id="myModal" class="modal fade" role="dialog">
+                    <div class="modal-dialog">
+                        <!-- modal content -->
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <h4 class="modal-title">Add Product</h4>
+                            </div>
+                            <div class="modal-body">
+                                <!--  -->
+                                <form action="#">
+                                    <div class="form-group">
+                                        <label for="nameProduct">Name: </label>
+                                        <input type="text" id="nameProduct" class="form-control" placeholder="Product name" required="please enter product name!">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="btnChooseImg">Image: </label>
+                                        <button class="btn btn-default" id="btnChooseImg"><span class="glypicon glyphicon-add"></span> ...</button>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="selectCategory">Category: </label>
+                                        
+                                        <select class="form-control" id="selectCategory">
+                                            <option value="#">-- category --</option>
+                                            
+                                            @foreach (Product_Category pc in ViewBag.Product_Categorys)
+                                            {
+                                                <option value="@pc.id">@pc.name</option>
+                                            }
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="price">Price:</label>
+                                        <input type="text" id="price" class="form-control" placeholder="Price (35000)">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="timeBooked">Times Booked:</label>
+                                        <input type="text" id="timeBooked" class="form-control" placeholder="number">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="description">Description:</label>
+                                        <textarea class="form-control" id="description" rows="2"></textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <button type="button" class="btn btn-default" onclick=AddProduct()>Add</button>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- search input -->
+                <div class="row">
+                    <div class="col-sm-6">
+                        <input type="text" class="form-control" id="search" placeholder="Search product">
+                    </div>
+                    <div class="col-sm-6"></div>
+                </div>
+                <!--  -->
+                <table class="table table-striped table-bordered" id="tableProduct">
+                    <thead class="text-center">
+                        <tr>
+                            <th>#</th>
+                            <th>ID Category</th>
+                            <th>Name</th>
+                            <th>Image</th>
+                            <th>Description</th>
+                            <th>Price</th>
+
+                            <th>Edit</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+                        @foreach (Product p in ViewBag.Products) {
+
+                        <tr>
+                            <td align="center">@p.id</td>
+                            <td align="center">@p.Product_Category.name</td>
+                            <td align="center">@p.name</td>
+                            <td><img src="@p.image" alt="Sample Image" width="100" height="100" /></td>
+                            <td align="center">@p.description</td>
+                            <td align="center">@p.salePrice</td>
+                            <td>
+                                <button class="btn btn-danger" value="Delete" onclick="DeleteProduct(@p.id)">Delete</button>
+                                <button class="btn btn-primary" data-toggle="modal" data-target="#modalUpdateProduct" onclick="">Update</button>
+                            </td>
+                        </tr>
+                        }
+                        
+                    </tbody>
+                </table>
+                <div id="modalUpdateProduct" class="modal fade" role="dialog">
+                    <div class="modal-dialog">
+                        <!-- modal content -->
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <h4 class="modal-title">Update Product</h4>
+                            </div>
+                            <div class="modal-body">
+                                <!--  -->
+                                <form action="#">
+                                    <div class="form-group">
+                                        <label for="nameProduct">Name: </label>
+                                        <input type="text" id="nameProductU" class="form-control" placeholder="Product name" required="please enter product name!">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="btnChooseImg">Image: </label>
+                                        <button class="btn btn-default" id="btnChooseImgU"><span class="glypicon glyphicon-add"></span> ...</button>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="selectCategory">Category: </label>
+
+                                        <select class="form-control" id="selectCategoryU">
+                                            <option value="#">-- category --</option>
+
+                                            @foreach (Product_Category pc in ViewBag.Product_Categorys)
+                                            {
+                                                <option value="@pc.id">@pc.name</option>
+                                            }
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="price">Price:</label>
+                                        <input type="text" id="priceU" class="form-control" placeholder="Price (35000)">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="timeBooked">Times Booked:</label>
+                                        <input type="text" id="timeBookedU" class="form-control" placeholder="number">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="description">Description:</label>
+                                        <textarea class="form-control" id="descriptionU" rows="2"></textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <button type="button" class="btn btn-default" onclick=UpdateProduct()>Update</button>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div><!--end column right-->
+        </div> <!--end row -->
+    </div> <!--end container-->
+</body>
+</html>
+

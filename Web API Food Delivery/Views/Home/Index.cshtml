@@ -1,0 +1,187 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    @{
+        ViewBag.Title = "Index";
+    }
+    <meta charset="UTF-8">
+    <title>Đặt món trực tuyến Tp.Hồ Chí Minh</title>
+    <!-- bootstrap -->
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+    <script src="jquery/jquery-3.3.1.min.js"></script>
+    <script src="bootstrap/js/bootstrap.min.js"></script>
+    <!-- cdn font awesome for icon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!-- style css -->
+    <style>
+        /*custom style for navigation bar*/
+        /*.navbar{
+            remove border radius on navigation
+            border-radius: 0;
+        }*/
+        /*	*{
+            border: 1px solid;
+        }*/
+        .sidenav {
+            background-color: #f1f1f1;
+            height: 800px;
+        }
+
+        .column-right {
+        }
+
+        .breadcrumb {
+            border-radius: 0;
+        }
+        /*hiện con trỏ khi hover qua card*/
+        .card {
+            cursor: pointer;
+        }
+    </style>
+    <!-- jquery for search on table -->
+    <script>
+		$(document).ready(function(){
+		    $("#search").on("keyup", function() {
+			    var value = $(this).val().toLowerCase();
+			    $("#tableOrderDetails tr").filter(function() {
+			      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+			    });
+		    });
+		});
+    </script>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row content">
+            <!-- column left -->
+            <div class="col-sm-3 sidenav">
+                <h4>Delivery food</h4>
+                <ul class="nav nav-pills nav-stacked">
+                    <li class="active"><a href="@Url.Action("Index", "Home" )"><span class="glyphicon glyphicon-dashboard"></span> Dashboard</a></li>
+                    <li><a href="@Url.Action("Product", "Home" )"><span class="glyphicon glyphicon-tags"> </span>  Products</a></li>
+                    <li><a href="@Url.Action("Employee", "Home" )"><span class="glyphicon glyphicon-user"> </span> Employee</a></li>
+                    <li><a href="@Url.Action("Users", "Home" )"><span class="glyphicon glyphicon-pencil"> </span> Users</a></li>
+                    <li><a href="@Url.Action("Invoices", "Home" )"><span class="glyphicon glyphicon-piggy-bank"> </span> Invoice</a></li>
+                    <li><a href="#"><span class="fa fa-bar-chart"></span> Reports</a></li>
+                    <li><a href="#"><span class="glyphicon glyphicon-cog"></span> System</a></li>
+                </ul>
+            </div>
+            <!-- column right -->
+            <div class="col-sm-9 column-right">
+                <!-- breadcrumn (tương tự phân trang) -->
+                <div class="row">
+                    <ul class="breadcrumb">
+                        <li><a href="">Dashboard</a></li>
+                        <li class="active"><a href="#">Order manager</a></li>
+                    </ul><hr>
+                </div>
+                <div class="row">
+                    <!-- cột bên trái để rỗng -->
+                    <div class="col-sm-4"></div>
+                    <!-- cột bên phải chứa các trạng thái: số order chưa được giao, số order đang được giao
+                    và số order đã giao -->
+                    <div class="col-sm-8 text-center">
+                        <div class="col-sm-4">
+                            <div class="card alert alert-info">
+                                <p>New order <span class="badge">1</span></p>
+                                <i class="fa fa-shopping-cart"></i>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="card alert alert-danger">
+                                <p>Delivering <span class="badge">1</span></p>
+                                <i class="fa fa-truck"></i>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="card alert alert-success">
+                                <p>Done <span class="badge">1</span></p>
+                                <i class="fa fa-check-circle"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div><hr>
+                <!-- search table-->
+                <div class="row" style="margin-bottom: 30px">
+                    <div class="col-sm-6">
+                        <input type="search" class="form-control" id="search" placeholder="Search">
+                    </div>
+                </div>
+                <!-- modal details user order, it hide default -->
+                <div id="modalDetails" class="modal fade" role="dialog">
+                    <div class="modal-dialog">
+                        <!-- modal content -->
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <h4 class="modal-title">Details Order</h4>
+                            </div>
+                            <div class="modal-body">
+                                <!--  -->
+                                <div>
+                                    <p>User Name - <strong>4 phần</strong></p>
+                                </div>
+                                <!-- list product order -->
+                                <div>
+                                    <ul>
+                                        <li>Cơm tấm - 20000</li>
+                                        <li>Coca - 12000</li>
+                                        <li>Khoai tây - 25000</li>
+                                        <li>Cafe -- 15000</li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <p class="">Status : <span class="badge">delivering</span></p>
+                                </div>
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- table order detail -->
+                <table class="table" id="tableOrderDetails">
+                    <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Customer name</th>
+                            <th>Address</th>
+                            <th>Amount</th>
+                            <th>View</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="info">
+                            <td>111</td>
+                            <td>Tạ Thảo</td>
+                            <td>Lê Văn Lương, Phước Kiểng, Nhà Bè, Hồ Chí Minh</td>
+                            <td>250.000</td>
+                            <td><a href="#" data-toggle="modal" data-target="#modalDetails">Detail</a></td>
+                            <td>Ordered</td>
+                        </tr>
+                        <tr class="warning">
+                            <td>112</td>
+                            <td>Thủy Tiên</td>
+                            <td>Lê Văn Lương, Phước Kiểng, Nhà Bè, Hồ Chí Minh</td>
+                            <td>150.000</td>
+                            <td><a href="#" data-toggle="modal" data-target="#modalDetails">Detail</a></td>
+                            <td>Delivering</td>
+                        </tr>
+                        <tr class="success">
+                            <td>113</td>
+                            <td>Jonh Doe</td>
+                            <td>100, Bình Thới, Quận 11, Hồ Chí Minh</td>
+                            <td>350.000</td>
+                            <td><a href="#" data-toggle="modal" data-target="#modalDetails">Detail</a></td>
+                            <td>Done</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div><!--end column right-->
+        </div> <!--end row -->
+    </div> <!--end container-->
+</body>
+</html>
